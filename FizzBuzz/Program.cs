@@ -57,7 +57,7 @@ namespace FizzBuzz
             return breakLoop;
         }
 
-        static void RunFizzBuzz(int n)
+        private static void RunFizzBuzz(int n)
         {
             var options = GetOptions();
 
