@@ -5,8 +5,6 @@ namespace FizzBuzz
 {
     class Program
     {
-        
-        
         static List<Tuple<int, string>> GetOptions()
         {
             var options = new List<Tuple<int, string>>();
@@ -16,7 +14,8 @@ namespace FizzBuzz
                 options.Add(Tuple.Create(7, "Bang"));
                 options.Add(Tuple.Create(11, "Bong"));
                 options.Add(Tuple.Create(13, "Fezz"));
-            };
+            }
+            ;
 
             var insertAt = 0;
             for (var i = 0; i < options.Count; i++)
@@ -27,7 +26,7 @@ namespace FizzBuzz
                 {
                     insertAt = i;
                 }
-                
+
                 if (option.Item2 != "Fezz")
                 {
                     continue;
@@ -49,7 +48,7 @@ namespace FizzBuzz
                 messages.Add(option.Item2);
                 breakLoop = true;
             }
-            
+
             if (value % 17 == 0)
             {
                 messages.Reverse();
@@ -61,7 +60,7 @@ namespace FizzBuzz
         static void Main(string[] _)
         {
             var options = GetOptions();
-            
+
             for (var i = 1; i <= 256; i++)
             {
                 var messages = new List<string>();
@@ -72,7 +71,7 @@ namespace FizzBuzz
                     {
                         continue;
                     }
-                    
+
                     matched = true;
                     messages.Add(option.Item2);
 
@@ -86,10 +85,9 @@ namespace FizzBuzz
                 {
                     messages.Add(i.ToString());
                 }
-                
+
                 Console.WriteLine(string.Join("", messages));
             }
-                
         }
     }
 }
