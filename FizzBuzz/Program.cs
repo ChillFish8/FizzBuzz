@@ -50,6 +50,15 @@ namespace FizzBuzz
             _options = validOptions;
         }
         
+        public IEnumerator GetEnumerator()
+        {
+            while (_start <= _n)
+            {
+                yield return RunFizzBuzz(_start);
+                _start++;
+            }
+        }
+        
         private static IEnumerable<Tuple<int, string>> GetOptions()
         {
             var options = new List<Tuple<int, string>>();
@@ -80,16 +89,7 @@ namespace FizzBuzz
 
             return options;
         }
-        
-        public IEnumerator GetEnumerator()
-        {
-            while (_start <= _n)
-            {
-                yield return RunFizzBuzz(_start);
-                _start++;
-            }
-        }
-        
+
         private string RunFizzBuzz(int i)
         {
             var messages = new List<string>();
