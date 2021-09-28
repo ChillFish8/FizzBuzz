@@ -70,7 +70,6 @@ namespace FizzBuzz
                 options.Add(Tuple.Create(13, "Fezz"));
                 options.Add(Tuple.Create(17, "_"));
             }
-            ;
 
             var insertAt = 0;
             for (var i = 0; i < options.Count; i++)
