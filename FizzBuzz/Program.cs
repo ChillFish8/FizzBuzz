@@ -19,10 +19,9 @@ namespace FizzBuzz
             }
 
             var fizzer = new FizzBuzz(int.Parse(line), cliOptions);
+            
             foreach (var value in fizzer)
-            {
                 Console.WriteLine(value);
-            }
         }
     }
 
@@ -47,7 +46,7 @@ namespace FizzBuzz
             }
 
             _n = n;
-            _start = 0;
+            _start = 1;
             _options = validOptions;
         }
         
@@ -70,14 +69,10 @@ namespace FizzBuzz
                 var option = options[i];
 
                 if (option.Item2.StartsWith("B"))
-                {
                     insertAt = i;
-                }
 
                 if (option.Item2 != "Fezz")
-                {
                     continue;
-                }
 
                 options.RemoveAt(i);
                 options.Insert(insertAt, option);
@@ -88,7 +83,7 @@ namespace FizzBuzz
         
         public IEnumerator GetEnumerator()
         {
-            while (_start < _n)
+            while (_start <= _n)
             {
                 yield return RunFizzBuzz(_start);
                 _start++;
@@ -109,15 +104,11 @@ namespace FizzBuzz
                 }
 
                 if (CheckSpecialCase(option, messages))
-                {
                     break;
-                }
             }
 
             if (!matched)
-            {
                 messages.Add(i.ToString());
-            }
 
             return string.Join("", messages);
         }
@@ -133,9 +124,7 @@ namespace FizzBuzz
             }
 
             if (option.Item1 == 17)
-            {
                 messages.Reverse();
-            }
 
             return breakLoop;
         }
