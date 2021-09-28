@@ -57,11 +57,11 @@ namespace FizzBuzz
             return breakLoop;
         }
 
-        static void Main(string[] _)
+        static void RunFizzBuzz(int n)
         {
             var options = GetOptions();
 
-            for (var i = 1; i <= 256; i++)
+            for (var i = 1; i <= n; i++)
             {
                 var messages = new List<string>();
                 var matched = false;
@@ -88,6 +88,21 @@ namespace FizzBuzz
 
                 Console.WriteLine(string.Join("", messages));
             }
+        }
+        
+        static void Main(string[] _)
+        {
+            
+            Console.Write("Enter a maximum number >>> ");
+            var line = Console.ReadLine();
+            
+            if (line is null)
+            {
+                Console.WriteLine("You must specify a input.");
+                return;
+            }
+            
+            RunFizzBuzz(int.Parse(line));
         }
     }
 }
