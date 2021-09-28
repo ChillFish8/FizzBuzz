@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FizzBuzz
 {
@@ -14,6 +15,7 @@ namespace FizzBuzz
                 options.Add(Tuple.Create(7, "Bang"));
                 options.Add(Tuple.Create(11, "Bong"));
                 options.Add(Tuple.Create(13, "Fezz"));
+                options.Add(Tuple.Create(17, "_"));
             }
             ;
 
@@ -39,7 +41,7 @@ namespace FizzBuzz
             return options;
         }
 
-        private static bool CheckSpecialCase(int value, Tuple<int, string> option, List<string> messages)
+        private static bool CheckSpecialCase(Tuple<int, string> option, List<string> messages)
         {
             var breakLoop = false;
             if (option.Item2 == "bong")
@@ -49,7 +51,7 @@ namespace FizzBuzz
                 breakLoop = true;
             }
 
-            if (value % 17 == 0)
+            if (option.Item1 == 17)
             {
                 messages.Reverse();
             }
@@ -57,10 +59,8 @@ namespace FizzBuzz
             return breakLoop;
         }
 
-        private static void RunFizzBuzz(int n)
+        private static void RunFizzBuzz(int n, List<Tuple<int, string>> options)
         {
-            var options = GetOptions();
-
             for (var i = 1; i <= n; i++)
             {
                 var messages = new List<string>();
@@ -72,10 +72,13 @@ namespace FizzBuzz
                         continue;
                     }
 
-                    matched = true;
-                    messages.Add(option.Item2);
+                    if (option.Item2 != "_")
+                    {
+                        matched = true;
+                        messages.Add(option.Item2);
+                    }
 
-                    if (CheckSpecialCase(i, option, messages))
+                    if (CheckSpecialCase(option, messages))
                     {
                         break;
                     }
@@ -89,20 +92,37 @@ namespace FizzBuzz
                 Console.WriteLine(string.Join("", messages));
             }
         }
-        
-        static void Main(string[] _)
+
+        static void Main(string[] cliOptions)
         {
-            
             Console.Write("Enter a maximum number >>> ");
             var line = Console.ReadLine();
-            
+
             if (line is null)
             {
                 Console.WriteLine("You must specify a input.");
                 return;
             }
-            
-            RunFizzBuzz(int.Parse(line));
+
+            var options = GetOptions();
+            var validOptions = new List<Tuple<int, string>>();
+
+            if (cliOptions.Length > 0)
+            {
+                var allowedOptions = cliOptions.ToArray();
+
+                for (var i = 0; i < options.Count; i++)
+                {
+                    var option = options[i];
+
+                    if (allowedOptions.Contains(option.Item1.ToString()))
+                    {
+                        validOptions.Add(option);
+                    }
+                }
+            }
+
+            RunFizzBuzz(int.Parse(line), validOptions);
         }
     }
 }
