@@ -66,22 +66,25 @@ namespace FizzBuzz
 
             for (var i = 1; i <= 100; i++)
             {
+                List<string> messages = new List<string>();
                 var matched = false;
                 foreach (var (value, msg) in options)
                 {
-                    if (i % value == 0)
+                    if (i % value != 0)
                     {
-                        matched = true;
-                        Console.Write(msg);
+                        continue;
                     }
+
+                    matched = true;
+                    messages.Add(msg);
                 }
 
                 if (!matched)
                 {
-                    Console.Write(i);
+                    messages.Add(i.ToString());
                 }
                 
-                Console.Write("\n");
+                Console.WriteLine(string.Join("", messages));
             }
                 
         }
