@@ -1,12 +1,57 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 
 namespace FizzBuzz
 {
     class Program
     {
-        static List<Tuple<int, string>> GetOptions()
+        static void Main(string[] cliOptions)
+        {
+            Console.Write("Enter a maximum number >>> ");
+            var line = Console.ReadLine();
+
+            if (line is null)
+            {
+                Console.WriteLine("You must specify a input.");
+                return;
+            }
+
+            var fizzer = new FizzBuzz(int.Parse(line), cliOptions);
+            foreach (var value in fizzer)
+            {
+                Console.WriteLine(value);
+            }
+        }
+    }
+
+    class FizzBuzz: IEnumerable
+    {
+        private int _n;
+        private int _start;
+        private readonly List<Tuple<int, string>> _options;
+
+        public FizzBuzz(int n, string[] cliOptions)
+        {
+            var options = GetOptions();
+            var validOptions = new List<Tuple<int, string>>();
+
+            if (cliOptions.Length > 0)
+            {
+                var allowedOptions = cliOptions.ToArray();
+
+                var collection = options
+                    .Where(option => allowedOptions.Contains(option.Item1.ToString()));
+                validOptions.AddRange(collection);
+            }
+
+            _n = n;
+            _start = 0;
+            _options = validOptions;
+        }
+        
+        private static IEnumerable<Tuple<int, string>> GetOptions()
         {
             var options = new List<Tuple<int, string>>();
             {
@@ -40,6 +85,42 @@ namespace FizzBuzz
 
             return options;
         }
+        
+        public IEnumerator GetEnumerator()
+        {
+            while (_start < _n)
+            {
+                yield return RunFizzBuzz(_start);
+                _start++;
+            }
+        }
+        
+        private string RunFizzBuzz(int i)
+        {
+            var messages = new List<string>();
+            var matched = false;
+            foreach (var option in _options
+                .Where(option => i % option.Item1 == 0))
+            {
+                if (option.Item2 != "_")
+                {
+                    matched = true;
+                    messages.Add(option.Item2);
+                }
+
+                if (CheckSpecialCase(option, messages))
+                {
+                    break;
+                }
+            }
+
+            if (!matched)
+            {
+                messages.Add(i.ToString());
+            }
+
+            return string.Join("", messages);
+        }
 
         private static bool CheckSpecialCase(Tuple<int, string> option, List<string> messages)
         {
@@ -57,72 +138,6 @@ namespace FizzBuzz
             }
 
             return breakLoop;
-        }
-
-        private static void RunFizzBuzz(int n, List<Tuple<int, string>> options)
-        {
-            for (var i = 1; i <= n; i++)
-            {
-                var messages = new List<string>();
-                var matched = false;
-                foreach (var option in options)
-                {
-                    if (i % option.Item1 != 0)
-                    {
-                        continue;
-                    }
-
-                    if (option.Item2 != "_")
-                    {
-                        matched = true;
-                        messages.Add(option.Item2);
-                    }
-
-                    if (CheckSpecialCase(option, messages))
-                    {
-                        break;
-                    }
-                }
-
-                if (!matched)
-                {
-                    messages.Add(i.ToString());
-                }
-
-                Console.WriteLine(string.Join("", messages));
-            }
-        }
-
-        static void Main(string[] cliOptions)
-        {
-            Console.Write("Enter a maximum number >>> ");
-            var line = Console.ReadLine();
-
-            if (line is null)
-            {
-                Console.WriteLine("You must specify a input.");
-                return;
-            }
-
-            var options = GetOptions();
-            var validOptions = new List<Tuple<int, string>>();
-
-            if (cliOptions.Length > 0)
-            {
-                var allowedOptions = cliOptions.ToArray();
-
-                for (var i = 0; i < options.Count; i++)
-                {
-                    var option = options[i];
-
-                    if (allowedOptions.Contains(option.Item1.ToString()))
-                    {
-                        validOptions.Add(option);
-                    }
-                }
-            }
-
-            RunFizzBuzz(int.Parse(line), validOptions);
         }
     }
 }
