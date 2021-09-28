@@ -27,11 +27,11 @@ namespace FizzBuzz
 
     class FizzBuzz: IEnumerable
     {
-        private int _n;
-        private int _start;
+        private readonly int _targetValue;
+        private int _startValue = 1;
         private readonly List<Tuple<int, string>> _options;
 
-        public FizzBuzz(int n, string[] cliOptions)
+        public FizzBuzz(int targetValue, string[] cliOptions)
         {
             var options = GetOptions();
             var validOptions = new List<Tuple<int, string>>();
@@ -44,18 +44,20 @@ namespace FizzBuzz
                     .Where(option => allowedOptions.Contains(option.Item1.ToString()));
                 validOptions.AddRange(collection);
             }
+            else
+            {
+                validOptions = options.ToList();
+            }
 
-            _n = n;
-            _start = 1;
+            _targetValue = targetValue;
             _options = validOptions;
         }
         
         public IEnumerator GetEnumerator()
         {
-            while (_start <= _n)
+            while (_startValue <= _targetValue)
             {
-                yield return RunFizzBuzz(_start);
-                _start++;
+                yield return RunFizzBuzz(_startValue++);
             }
         }
         
