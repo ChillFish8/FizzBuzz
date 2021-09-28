@@ -11,7 +11,7 @@ namespace FizzBuzz
         
         static List<Tuple<int, string>> GetOptions()
         {
-            List<Tuple<int, string>> options = new List<Tuple<int, string>>();
+            var options = new List<Tuple<int, string>>();
             {
                 options.Add(Tuple.Create(3, "Fizz"));
                 options.Add(Tuple.Create(5, "Buzz"));
@@ -21,7 +21,7 @@ namespace FizzBuzz
             };
 
             var insertAt = 0;
-            for (int i = 0; i < options.Count; i++)
+            for (var i = 0; i < options.Count; i++)
             {
                 var option = options[i];
 
@@ -42,41 +42,46 @@ namespace FizzBuzz
             return options;
         }
 
-        static bool CheckSpecialCase(Tuple<int, string> option, List<string> messages)
+        private static bool CheckSpecialCase(int value, Tuple<int, string> option, List<string> messages)
         {
+            var breakLoop = false;
             if (option.Item2 == "bong")
             {
                 messages.Clear();
                 messages.Add(option.Item2);
-                return true;
+                breakLoop = true;
             }
             
-            if (option.Item1 == 17)
+            if (value % 17 == 0)
             {
                 messages.Reverse();
-                return false;
             }
 
-            return false;
+            return breakLoop;
         }
 
         static void Main(string[] _)
         {
             var options = GetOptions();
-
-            for (var i = 1; i <= 100; i++)
+            
+            for (var i = 1; i <= 256; i++)
             {
-                List<string> messages = new List<string>();
+                var messages = new List<string>();
                 var matched = false;
-                foreach (var (value, msg) in options)
+                foreach (var option in options)
                 {
-                    if (i % value != 0)
+                    if (i % option.Item1 != 0)
                     {
                         continue;
                     }
-
+                    
                     matched = true;
-                    messages.Add(msg);
+                    messages.Add(option.Item2);
+
+                    if (CheckSpecialCase(i, option, messages))
+                    {
+                        break;
+                    }
                 }
 
                 if (!matched)
